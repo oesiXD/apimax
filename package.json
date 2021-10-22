@@ -1,0 +1,19 @@
+{
+  "name": "testapi",
+  "version": "1.0.0",
+  "description": "mi proyect",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "author": "andres",
+  "license": "ISC",
+  "dependencies": {
+    "@adiwajshing/baileys": "^3.5.2",
+    "body-parser": "^1.19.0",
+    "cors": "^2.8.5",
+    "express": "^4.17.1",
+    "morgan": "^1.10.0",
+    "path": "^0.12.7"
+  }
+}
