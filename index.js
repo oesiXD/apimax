@@ -132,7 +132,7 @@ app.get('/qr.png', function(req,res){
   if(fs.existsSync("./qr.png")){
     res.sendFile('./qr.png',{ root: __dirname });
    }else{
-   
+   res.json("No QR");
    }
 
 
@@ -145,7 +145,7 @@ const  data =req.body;
 const id = data.telefono+'@s.whatsapp.net' // the WhatsApp ID 
 // send a simple text!
 const sentMsg  = await conn.sendMessage(
-  id, { document: { url: "sample.pdf" }, mimetype: 'application/pdf',fileName:"sample.pdf" }) .then((result) => {
+  id, { document: { url: data.url }, mimetype: 'application/pdf',fileName:"sample.pdf" }) .then((result) => {
     res.json("Archivo enviado");
   })
   .catch((erro) => {
@@ -156,7 +156,7 @@ const sentMsg  = await conn.sendMessage(
 
 app.post('/sendText', async(req, res) => {
 const  data =req.body;
-    const id = data.telefono+'56933237854@s.whatsapp.net' // the WhatsApp ID 
+    const id = data.telefono+'@s.whatsapp.net' // the WhatsApp ID 
     // send a simple text!
     const sentMsg  = await conn.sendMessage(id, { text: data.text }) .then((result) => {
         res.json("Mensaje enviado :)");
