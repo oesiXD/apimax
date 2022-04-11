@@ -1,0 +1,205 @@
+%PDF-1.3
+3 0 obj
+<</Type /Page
+/Parent 1 0 R
+/Resources 2 0 R
+/MediaBox [0 0 595.28 841.89]
+/Contents 4 0 R
+>>
+endobj
+4 0 obj
+<</Length 2291>>
+stream
+0.57 w
+0 G
+q
+q BT 0 g 42.52 785.33 Td
+0 -14.04 Td
+0.000 g
+/F10 14.04 Tf (Hello, this is a H3 tag) Tj
+ET Q
+q BT 0 g 42.52 757.25 Td
+0 -12.00 Td
+/F9 12.00 Tf (Upload to Imgur) Tj
+ET Q
+q BT 0 g 42.52 730.31 Td
+0 -18.00 Td
+/F10 18.00 Tf (this is ) Tj
+/F10 18.00 Tf (bold) Tj
+/F10 18.00 Tf ( ) Tj
+1.000 0.000 0.000 rg
+/F10 18.00 Tf (red) Tj
+ET Q
+q BT 0 g 42.52 697.37 Td
+0 -12.00 Td
+0.000 g
+/F9 12.00 Tf (Feedback form with screenshot This script allows you to create feedback forms which include a) Tj
+0 -12.00 Td
+/F9 12.00 Tf (screenshot, created on the clients browser, along with the form. The screenshot is based on the) Tj
+0 -12.00 Td
+/F9 12.00 Tf (DOM and as such may not be 100% accurate to the real representation as it does not make an actual) Tj
+0 -12.00 Td
+/F9 12.00 Tf (screenshot, but builds the screenshot based on the information available on the page. How does it) Tj
+0 -12.00 Td
+/F9 12.00 Tf (work? The script is based on the html2canvas library, which renders the current page as a canvas) Tj
+0 -12.00 Td
+/F9 12.00 Tf (image, by reading the DOM and the different styles applied to the elements. This script adds the) Tj
+0 -12.00 Td
+/F9 12.00 Tf (options for the user to draw elements on top of that image, such as mark points of interest on the) Tj
+0 -12.00 Td
+/F9 12.00 Tf (image along with the feedback they send. It does not require any rendering from the server, as the) Tj
+0 -12.00 Td
+/F9 12.00 Tf (whole image is created on the clients browser. No plugins, no flash, no interaction needed from the) Tj
+0 -12.00 Td
+/F9 12.00 Tf (server, just pure JavaScript! Browser compatibility Firefox 3.5+ Newer versions of Google Chrome,) Tj
+0 -12.00 Td
+/F9 12.00 Tf (Safari & Opera IE9) Tj
+ET Q
+q BT 0 g 42.52 552.62 Td
+532.9528068832808 -12.00 Td
+/F9 10.00 Tf (generate PDF) Tj
+ET Q
+q BT 0 g 42.52 539.87 Td
+1.42 -12.00 Td
+/F9 12.00 Tf ($\(function \(\) { var specialElementHandlers = { '#editor': function \(element, renderer\) { return true;) Tj
+0 -12.00 Td
+/F9 12.00 Tf (} }; $\('#cmd'\).click\(function \(\) { var doc = new jsPDF\(\); doc.fromHTML\($\('#target'\).html\(\), 15, 15,) Tj
+0 -12.00 Td
+/F9 12.00 Tf ({ 'width': 170, 'elementHandlers': specialElementHandlers }\); doc.save\('sample-file.pdf'\); }\); }\); //#) Tj
+0 -12.00 Td
+/F9 12.00 Tf (sourceURL=pen.js) Tj
+ET Q
+Q
+endstream
+endobj
+1 0 obj
+<</Type /Pages
+/Kids [3 0 R ]
+/Count 1
+>>
+endobj
+5 0 obj
+<</BaseFont/Helvetica/Type/Font
+/Encoding/WinAnsiEncoding
+/Subtype/Type1>>
+endobj
+6 0 obj
+<</BaseFont/Helvetica-Bold/Type/Font
+/Encoding/WinAnsiEncoding
+/Subtype/Type1>>
+endobj
+7 0 obj
+<</BaseFont/Helvetica-Oblique/Type/Font
+/Encoding/WinAnsiEncoding
+/Subtype/Type1>>
+endobj
+8 0 obj
+<</BaseFont/Helvetica-BoldOblique/Type/Font
+/Encoding/WinAnsiEncoding
+/Subtype/Type1>>
+endobj
+9 0 obj
+<</BaseFont/Courier/Type/Font
+/Encoding/WinAnsiEncoding
+/Subtype/Type1>>
+endobj
+10 0 obj
+<</BaseFont/Courier-Bold/Type/Font
+/Encoding/WinAnsiEncoding
+/Subtype/Type1>>
+endobj
+11 0 obj
+<</BaseFont/Courier-Oblique/Type/Font
+/Encoding/WinAnsiEncoding
+/Subtype/Type1>>
+endobj
+12 0 obj
+<</BaseFont/Courier-BoldOblique/Type/Font
+/Encoding/WinAnsiEncoding
+/Subtype/Type1>>
+endobj
+13 0 obj
+<</BaseFont/Times-Roman/Type/Font
+/Encoding/WinAnsiEncoding
+/Subtype/Type1>>
+endobj
+14 0 obj
+<</BaseFont/Times-Bold/Type/Font
+/Encoding/WinAnsiEncoding
+/Subtype/Type1>>
+endobj
+15 0 obj
+<</BaseFont/Times-Italic/Type/Font
+/Encoding/WinAnsiEncoding
+/Subtype/Type1>>
+endobj
+16 0 obj
+<</BaseFont/Times-BoldItalic/Type/Font
+/Encoding/WinAnsiEncoding
+/Subtype/Type1>>
+endobj
+2 0 obj
+<<
+/ProcSet [/PDF /Text /ImageB /ImageC /ImageI]
+/Font <<
+/F1 5 0 R
+/F2 6 0 R
+/F3 7 0 R
+/F4 8 0 R
+/F5 9 0 R
+/F6 10 0 R
+/F7 11 0 R
+/F8 12 0 R
+/F9 13 0 R
+/F10 14 0 R
+/F11 15 0 R
+/F12 16 0 R
+>>
+/XObject <<
+>>
+>>
+endobj
+17 0 obj
+<<
+/Producer (jsPDF 1.1.135-git 2015-05-16T00:15:jameshall)
+/CreationDate (D:20220308085753-03'00')
+>>
+endobj
+18 0 obj
+<<
+/Type /Catalog
+/Pages 1 0 R
+/OpenAction [3 0 R /FitH null]
+/PageLayout /OneColumn
+>>
+endobj
+xref
+0 19
+0000000000 65535 f 
+0000002459 00000 n 
+0000003658 00000 n 
+0000000009 00000 n 
+0000000118 00000 n 
+0000002516 00000 n 
+0000002606 00000 n 
+0000002701 00000 n 
+0000002799 00000 n 
+0000002901 00000 n 
+0000002989 00000 n 
+0000003083 00000 n 
+0000003180 00000 n 
+0000003281 00000 n 
+0000003374 00000 n 
+0000003466 00000 n 
+0000003560 00000 n 
+0000003882 00000 n 
+0000004001 00000 n 
+trailer
+<<
+/Size 19
+/Root 18 0 R
+/Info 17 0 R
+>>
+startxref
+4105
+%%EOF

@@ -1,49 +1,89 @@
-const vayleys = require('@adiwajshing/baileys')
+const {
+  default: makeWASocket,
+  DisconnectReason,
+  useSingleFileAuthState,
+  Browsers,
+  isJidGroup,
+  makeInMemoryStore,
+  jidNormalizedUser,
+  fetchLatestBaileysVersion,
+  getContentType
+} = require('@adiwajshing/baileys');
+const { Boom } = require('./node_modules/@hapi/boom')
 const fs = require('fs')
-const conn = new vayleys.WAConnection() 
+const pino = require('pino');
+const QRCode = require("qrcode") ;
+const store = makeInMemoryStore({ logger: pino().child({ level: 'debug', stream: 'store' }) })
+store.readFromFile('./baileys_store_multi.json')
+// save every 10s
+setInterval(() => {
+	store.writeToFile('./baileys_store_multi.json')
+}, 10.000)
+let sock;
+const { state, saveState } = useSingleFileAuthState('./auth_info_multi.json')
+
 async function connectToWhatsApp () {
-  
-    // this will be called as soon as the credentials are updated
-conn.on ('open', () => {
-    // save credentials whenever updated
-    console.log (`credentials updated!`)
-    const authInfo = conn.base64EncodedAuthInfo() // get all the auth info we need to restore this session
-    fs.writeFileSync('./auth_info.json', JSON.stringify(authInfo, null, '\t')) // save this info to a file
+  let sock = makeWASocket({
 
-})
-conn.loadAuthInfo ('./auth_info.json')
-await conn.connect() // connect
-    // called when WA sends chats
-    // this can take up to a few minutes if you have thousands of chats!
-    conn.on('chats-received', async ({ hasNewChats }) => {
-        console.log(`you have ${conn.chats.length} chats, new chats available: ${hasNewChats}`)
+    printQRInTerminal: true,
+    logger: pino({ level: 'silent' }),
+    auth: state,
+    browser: Browsers.macOS('Safari')
+});
 
-        const unread = await conn.loadAllUnreadMessages ()
-        console.log ("you have " + unread.length + " unread messages")
-    })
-    // called when WA sends chats
-    // this can take up to a few minutes if you have thousands of contacts!
-    conn.on('contacts-received', () => {
-        console.log('you have ' + Object.keys(conn.contacts).length + ' contacts')
-    })
+  store.bind(sock.ev)
 
-    await conn.connect ()
-    conn.on('chat-update', chatUpdate => {
-        // `chatUpdate` is a partial object, containing the updated properties of the chat
-        // received a new message
-        if (chatUpdate.messages && chatUpdate.count) {
-            const message = chatUpdate.messages.all()[0]
-            console.log (message)
-        } else console.log (chatUpdate) // see updates (can be archived, pinned etc.)
-    })
 
+    
+	sock.ev.on('chats.set', item => console.log(`recv ${item.chats.length} chats (is latest: ${item.isLatest})`))
+	sock.ev.on('messages.set', item => console.log(`recv ${item.messages.length} messages (is latest: ${item.isLatest})`))
+	sock.ev.on('contacts.set', item => console.log(`recv ${item.contacts.length} contacts`))
+
+
+
+	sock.ev.on('messages.update', m => console.log(m))
+	sock.ev.on('message-receipt.update', m => console.log(m))
+	sock.ev.on('presence.update', m => console.log(m))
+	sock.ev.on('contacts.upsert', m => console.log(m))
+
+	sock.ev.on('connection.update', (update) => {
+
+    if (update.qr){
+      QRCode.toFile('qr.png', update.qr, {
+        color: {
+          dark: '#00F',  // Blue dots
+          light: '#0000' // Transparent background
+        }
+      }, function (err) {
+        if (err) throw err
+        console.log('done')
+      })
+    } 
    
+    console.log('estado' )
+		const { connection, lastDisconnect } = update
+		if(connection === 'close') {
+			// reconnect if not logged out
+      const statusCode = lastDisconnect.error ? new Boom(lastDisconnect)?.output.statusCode : 0;
+      if (statusCode === DisconnectReason.badSession) { console.log(`Bad session file, delete  and run again`); connectToWhatsApp(); }
+      else if (statusCode === DisconnectReason.connectionClosed) { console.log('Connection closed, reconnecting....'); connectToWhatsApp() }
+      else if (statusCode === DisconnectReason.connectionLost) { console.log('Connection lost, reconnecting....'); connectToWhatsApp() }
+      else if (statusCode === DisconnectReason.connectionReplaced) { console.log('Connection Replaced, Another New Session Opened, Please Close Current Session First'); process.exit() }
+      else if (statusCode === DisconnectReason.loggedOut) { console.log(`Device Logged Out, Please Delete  and Scan Again.`); 	connectToWhatsApp(); }
+      else if (statusCode === DisconnectReason.restartRequired) { console.log('Restart required, restarting...'); connectToWhatsApp(); }
+      else if (statusCode === DisconnectReason.timedOut) { console.log('Connection timedOut, reconnecting...'); connectToWhatsApp(); }
+      
+		}
+        
+		console.log('connection update', update)
+	})
+	// listen for when the auth credentials is updated
+	sock.ev.on('creds.update', saveState)
 
-
-
+ conn = sock
 }
 // run in main file
-connectToWhatsApp ()
+connectToWhatsApp()
 .catch (err => console.log("unexpected error: " + err) ) // catch any errors
 
 const express = require('express');
@@ -58,19 +98,54 @@ app.use(bodyParser.urlencoded({
   extended: false
 }));
 
-app.get('/', function (req, res) {
+app.get('/' , async(req, res) => {
+
+try {
   res.json({
-    "tutorial": "Construyendo una API REST con NodeJS 202222"
+    "tutorial": conn
   });
+}catch (err) {
+  res.json({
+    "tutorial": err
+  });
+}
+
+
 });
+
+app.get('/recuperar',async(req, res) => {
+  if(fs.existsSync("./auth_info_multi.json") || fs.existsSync("./baileys_store_multi.json")){
+    fs.unlinkSync('./auth_info_multi.json');
+    fs.unlinkSync('./baileys_store_multi.json');
+    
+   }
+
+
+   process.exit()
+
+
+  
+
+});
+app.get('/qr.png', function(req,res){
+
+  if(fs.existsSync("./qr.png")){
+    res.sendFile('./qr.png',{ root: __dirname });
+   }else{
+   
+   }
+
+
+});
+
 //PARA ENVIAR IMAGENES CON TEXTO O SIN TEXTO
 
 app.post('/sendFile', async(req, res) => {
 const  data =req.body;
 const id = data.telefono+'@s.whatsapp.net' // the WhatsApp ID 
 // send a simple text!
-const sentMsg  = await conn.sendMessage (id,  { url: data.url },vayleys.MessageType.document, 
-{ mimetype: vayleys.Mimetype.pdf, filename: data.namefile+".pdf"  }) .then((result) => {
+const sentMsg  = await conn.sendMessage(
+  id, { document: { url: "sample.pdf" }, mimetype: 'application/pdf',fileName:"sample.pdf" }) .then((result) => {
     res.json("Archivo enviado");
   })
   .catch((erro) => {
@@ -81,9 +156,9 @@ const sentMsg  = await conn.sendMessage (id,  { url: data.url },vayleys.MessageT
 
 app.post('/sendText', async(req, res) => {
 const  data =req.body;
-    const id = data.telefono+'@s.whatsapp.net' // the WhatsApp ID 
+    const id = data.telefono+'56933237854@s.whatsapp.net' // the WhatsApp ID 
     // send a simple text!
-    const sentMsg  = await conn.sendMessage (id, data.text, vayleys.MessageType.text) .then((result) => {
+    const sentMsg  = await conn.sendMessage(id, { text: data.text }) .then((result) => {
         res.json("Mensaje enviado :)");
       })
       .catch((erro) => {
